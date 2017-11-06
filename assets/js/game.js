@@ -37,6 +37,7 @@ function randomObjectPicker()
       unguessedString[i] = "_"; 
       }
     }
+  firstGame = false;
   keystrokes();
   }
 
@@ -112,6 +113,7 @@ if (tries.length > 5) // check if Player has 5 tries, in which case loses
   document.getElementById("isWin").innerHTML = "YOU LOSE!!! the  word was: " +  currentString;
   document.getElementById("loses").innerHTML = "Loses : " + loses;
   loses++;
+  firstGame = true;
   setTimeout(createHangmanWord, 3000); // will wait 3 seconds until next word is displayed, also will delete the "isWin" tag                                     // create a new word
   tries = []; //reset Tries
 }
