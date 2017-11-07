@@ -37,8 +37,10 @@ function randomObjectPicker()
       unguessedString[i] = "_"; 
       }
     }
+
   firstGame = false;
   keystrokes();
+ 
   }
 
 
@@ -64,7 +66,6 @@ return counter1
 
 function keystrokes(compKeystroke)
 {
-
   for (i=0;i<currentString.length;i++)
     {
       if (currentString.charAt(i)== compKeystroke)
@@ -78,15 +79,18 @@ function keystrokes(compKeystroke)
         unguessedString[i] = " ";   // with this line the user doesn't need to type spaces for two word games.
       } 
     }
-      if (countChar(currentString, compKeystroke) == 0)
+      if (compKeystroke != undefined) // will prevent "tries" to have undefined characters due to the function skipping controls. 
       {
-      if(tries.indexOf(compKeystroke) == -1)
-      {
-         tries[tries.length]= compKeystroke;
-      } 
+        if (countChar(currentString, compKeystroke) == 0) // this line will check if the keystroke is in the current string, if not will add it to "tries"
+        {
+        if(tries.indexOf(compKeystroke) == -1)
+        {
+            tries[tries.length]= compKeystroke;
+        } 
+        }
       }
-    document.getElementById("unguessed").innerHTML = unguessedString;
-  gameWin(); //check isWin
+    printSingleCharacter("unguessed", unguessedString); // Refresh Unguessed string to the html document
+    gameWin(); //check isWin
 }
 
 //CHECK IF THE USER GUESSED THE WORD CORRECTLY
@@ -120,6 +124,29 @@ if (tries.length > 5) // check if Player has 5 tries, in which case loses
 
 }
  
+//====================================================================//
+// this function will create a class to print the unguessed string character by character, it will help scalate design // printing character as buttons
+
+function printSingleCharacter(idToChange ,stringToRun)
+{
+  var stringToBeDisplayed="";
+  for (var i=0; i<stringToRun.length;i++)
+  {  
+    console.log('reading inside the for string char is' + stringToRun[i] + "end");
+    if (stringToRun[i] === ' ') // this line will add three blank spaces when there is a multiword string
+    {
+      console.log("reading iside the string");
+      //stringToBeDisplayed= stringToBeDisplayed + "\xa0\xa0\xa0"; // IN CASE I WANT THREE SPACES TO BE DISPLAYED INSTEAD OF BUTTONS 
+      stringToBeDisplayed = stringToBeDisplayed + "<button type=" +'"button"'+ "class=" +'"btn btn-secondary">' + "\xa0" +"</button>"; // THIS IS AMAZING, IT WILL ADD A GROUP BUTTON WITH THE STRING CHAR    
+    } else
+    { 
+      //stringToBeDisplayed= stringToBeDisplayed + " " +unguessedString[i] ; // IN CASE I JUST WANT "_" TO BE DISPLAYED
+      stringToBeDisplayed = stringToBeDisplayed + "<button type=" +'"button"'+ "class=" +'"btn btn-warning">' + stringToRun[i].toUpperCase() +"</button>"; // THIS IS AMAZING, IT WILL ADD A GROUP BUTTON WITH THE STRING CHAR
+    }
+  }
+
+document.getElementById(idToChange).innerHTML = stringToBeDisplayed;
+} 
 
 
 //====================================================================//
@@ -133,10 +160,11 @@ console.log("User choice: " + choice);
 
   if (choice == "`") //RESET THE GAME CURRENT WORDS, INCREASE LOSES BY 1
   {
-  firstGame = false;
+
   document.getElementById("isWin").innerHTML = "";
   createHangmanWord();
-  document.getElementById("unguessed").innerHTML = unguessedString;
+  firstGame = false;
+  printSingleCharacter("unguessed",unguessedString); // Refresh Unguessed string to the html document
   document.getElementById("loses").innerHTML = "Loses : " + loses;
     console.log("Computer Wins");
     loses++;
@@ -149,7 +177,7 @@ console.log("User choice: " + choice);
     if (validChars[i] == choice.toLowerCase() && firstGame === false)
     {
       keystrokes(choice);
-      document.getElementById("unguessed").innerHTML = unguessedString;
+      printSingleCharacter("unguessed",unguessedString); // Refresh Unguessed string to the html document
     }
   }
 //===============================================================
@@ -163,7 +191,8 @@ console.log("User choice: " + choice);
   console.log("Wins : " + wins);
   console.log("Loses : " + loses);
   document.getElementById("user").innerHTML = "User choice: " + choice;
-  document.getElementById("tries").innerHTML = "Tries : " + tries;
+  // document.getElementById("tries").innerHTML = "Tries : " + tries; // this line was only printing the tries to the button created. might use in the future
+  printSingleCharacter("tries", tries);
 	document.getElementById("wins").innerHTML = "Wins : " + wins;
 
 
