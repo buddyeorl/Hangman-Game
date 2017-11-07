@@ -70,6 +70,8 @@ function keystrokes(compKeystroke)
     {
       if (currentString.charAt(i)== compKeystroke)
       {
+      document.getElementById("myAudio").currentTime = 0;
+      document.getElementById("myAudio").play().playbackRate = 2; //play a sound on keystrokes
       console.log(unguessedString);
       unguessedString[i] = compKeystroke; // This will add a space between words
       console.log(unguessedString[1] + "changed");
@@ -81,10 +83,12 @@ function keystrokes(compKeystroke)
     }
       if (compKeystroke != undefined) // will prevent "tries" to have undefined characters due to the function skipping controls. 
       {
-        if (countChar(currentString, compKeystroke) == 0) // this line will check if the keystroke is in the current string, if not will add it to "tries"
+        if (countChar(currentString, compKeystroke) == 0 && currentString.length > 0 ) // this line will check if the keystroke is in the current string and the string size is at least 1, if not will add it to "tries"
         {
         if(tries.indexOf(compKeystroke) == -1)
         {
+            document.getElementById("myAudio2").currentTime = 0;
+            document.getElementById("myAudio2").play().playbackRate = 2; //play a sound on keystrokes
             tries[tries.length]= compKeystroke;
         } 
         }
@@ -107,6 +111,7 @@ if (winChecker ==currentString)
   console.log("You Win" + winChecker + currentString);
   document.getElementById("isWin").innerHTML = "YOU WIN";
   wins++;
+  currentString = "";
   setTimeout(createHangmanWord, 3000); // will wait 3 seconds until next word is displayed, also will delete the "isWin" tag
                                       // create a new word
   tries = []; //reset Tries
@@ -152,6 +157,9 @@ document.getElementById(idToChange).innerHTML = stringToBeDisplayed;
 //====================================================================//
 //====================================================================//
 document.onkeyup = function(event) {
+
+
+
 var choice = event.key;
 var options = ["r","s","p"];
 var choice2 = options[Math.floor(Math.random()*options.length)];
@@ -160,7 +168,6 @@ console.log("User choice: " + choice);
 
   if (choice == "`") //RESET THE GAME CURRENT WORDS, INCREASE LOSES BY 1
   {
-
   document.getElementById("isWin").innerHTML = "";
   createHangmanWord();
   firstGame = false;
@@ -182,7 +189,6 @@ console.log("User choice: " + choice);
   }
 //===============================================================
  
-
 
 
 
