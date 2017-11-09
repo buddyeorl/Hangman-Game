@@ -24,7 +24,7 @@ function randomObjectPicker()
 //CHECK STRING SIZE AND CREATE "_" FOR EVERY CHARACTER //
   function createHangmanWord()
   {
-    document.getElementById("isWin").innerHTML = "";
+    isWinDisplay();
     unguessedString = [];
     var locWord = randomObjectPicker();
     for (i=0;i<locWord.length;i++)
@@ -109,7 +109,7 @@ for (var i=0;i<unguessedString.length;i++)
 if (winChecker ==currentString)
 {
   console.log("You Win" + winChecker + currentString);
-  document.getElementById("isWin").innerHTML = "YOU WIN";
+  isWinDisplay(1);
   wins++;
   currentString = "";
   setTimeout(createHangmanWord, 3000); // will wait 3 seconds until next word is displayed, also will delete the "isWin" tag
@@ -119,8 +119,8 @@ if (winChecker ==currentString)
 if (tries.length > 5) // check if Player has 5 tries, in which case loses
 {
   console.log("You LOSE" + winChecker + currentString);
-  document.getElementById("isWin").innerHTML = "YOU LOSE!!! the  word was: " +  currentString;
-  document.getElementById("loses").innerHTML = "Loses : " + loses;
+  isWinDisplay(2);
+  loseDisplay();
   loses++;
   firstGame = true;
   setTimeout(createHangmanWord, 3000); // will wait 3 seconds until next word is displayed, also will delete the "isWin" tag                                     // create a new word
@@ -153,26 +153,58 @@ function printSingleCharacter(idToChange ,stringToRun)
 document.getElementById(idToChange).innerHTML = stringToBeDisplayed;
 } 
 
+//============================================================================//
+//============================================================================//
+// the functions below will update all the interactive html tags with the new values, user keystroke, wins, loses, win message.
+function wrongGoodMessage(displayMessage)   // will print "Good!!" when keystroke is in the string or "Wrong!!" when not, Also will print initial instructions when starting game
+{
+  document.getElementById("user").innerHTML = displayMessage;
+}
+
+function winDisplay() // this will update isWin tag with the current user's wins
+{
+  document.getElementById("wins").innerHTML = "Wins : " + wins;
+}
+
+function loseDisplay() // this will update lose tag with the current user's loses
+{
+  document.getElementById("loses").innerHTML = "Loses : " + loses;
+}
+
+function isWinDisplay(displayMessage) // this will update isWin tag with the winning or losing message
+{
+ if (displayMessage == 1)
+ {
+  displayMessage = "YOU WIN";
+ } else if (displayMessage ==2)
+ {
+  displayMessage = "YOU LOSE!!! the  word was: " +  currentString.toUpperCase();
+ } else
+ {
+  displayMessage = "";
+ }
+  document.getElementById("isWin").innerHTML = displayMessage;
+}
 
 //====================================================================//
 //====================================================================//
+wrongGoodMessage("Press Enter to start");
+winDisplay();
+loseDisplay();
+
 document.onkeyup = function(event) {
-
-
-
-var choice = event.key;
-var options = ["r","s","p"];
-var choice2 = options[Math.floor(Math.random()*options.length)];
+var choice = event.key.toLowerCase();
 
 console.log("User choice: " + choice);
 
-  if (choice == "`") //RESET THE GAME CURRENT WORDS, INCREASE LOSES BY 1
+  if (choice == "enter") //RESET THE GAME CURRENT WORDS, INCREASE LOSES BY 1
   {
-  document.getElementById("isWin").innerHTML = "";
+  tries = []; //reset tries array 
+  isWinDisplay();
   createHangmanWord();
   firstGame = false;
   printSingleCharacter("unguessed",unguessedString); // Refresh Unguessed string to the html document
-  document.getElementById("loses").innerHTML = "Loses : " + loses;
+  loseDisplay();
     console.log("Computer Wins");
     loses++;
   }
@@ -189,17 +221,13 @@ console.log("User choice: " + choice);
   }
 //===============================================================
  
-
-
-
-
   console.log("Tries : " + tries);
   console.log("Wins : " + wins);
   console.log("Loses : " + loses);
   document.getElementById("user").innerHTML = "User choice: " + choice;
   // document.getElementById("tries").innerHTML = "Tries : " + tries; // this line was only printing the tries to the button created. might use in the future
   printSingleCharacter("tries", tries);
-	document.getElementById("wins").innerHTML = "Wins : " + wins;
+	winDisplay();
 
 
 }
