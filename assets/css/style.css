@@ -13,7 +13,7 @@
 /* Social Icons are inside this footer which is above the lowest footer*/
 .footersn
 {
-  position: absolute;
+  position: relative;
   bottom: 0px;
   margin-left: 0px;
   margin-right: 0px;
@@ -53,3 +53,39 @@ min-height: 800px;
 overflow:inherit;
 
 }
+
+#displayImg
+{
+  position:relative;
+  height: 100%; 
+  width: 100%; 
+  object-fit: contain
+}
+
+/* this will add the blur effect to the image hint working along with javascript*/
+.blur1
+{
+filter: blur(10px);
+}
+.blur2
+{
+filter: blur(8px);
+}
+.blur3
+{
+filter: blur(6px);
+}
+.blur4
+{
+filter: blur(4px);
+}
+.blur5
+{
+filter: blur(3px);
+}
+.blur6
+{
+filter: blur(0px);
+}
+
+

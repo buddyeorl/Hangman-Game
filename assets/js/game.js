@@ -7,6 +7,7 @@ var unguessedString = ["text"]; // this array will create the "__" word placer
 var currentString = ""; // current string being played
 var counterObject;
 var firstGame = true; //firstGame will prevent the script from updating 'tries' variable and update page on first game
+var hint = 0;
 
 //====================Random Value Picker inside Object===========================//
 
@@ -17,6 +18,7 @@ function randomObjectPicker()
   console.log("random word generated " + Object.values(themes)[0][ranPicker]);
   currentString = Object.values(themes)[0][ranPicker]; // the zero means the index 0 in the object i created, I will update this to pick different properties in the object
   currentString = currentString.toLowerCase();
+  hint=ranPicker;
   return Object.values(themes)[0][ranPicker];
 }
 
@@ -37,7 +39,7 @@ function randomObjectPicker()
       unguessedString[i] = "_"; 
       }
     }
-
+  hintPic(1); // this will create a blurred picture
   firstGame = false;
   keystrokes();
  
@@ -70,6 +72,7 @@ function keystrokes(compKeystroke)
     {
       if (currentString.charAt(i)== compKeystroke)
       {
+      wrongGoodMessage("GOOD!!!");
       document.getElementById("myAudio").currentTime = 0;
       document.getElementById("myAudio").play().playbackRate = 2; //play a sound on keystrokes
       console.log(unguessedString);
@@ -87,9 +90,11 @@ function keystrokes(compKeystroke)
         {
         if(tries.indexOf(compKeystroke) == -1)
         {
+            wrongGoodMessage("WRONG !!!  TRY AGAIN!!!");
             document.getElementById("myAudio2").currentTime = 0;
             document.getElementById("myAudio2").play().playbackRate = 2; //play a sound on keystrokes
             tries[tries.length]= compKeystroke;
+            hintPic(tries.length); // will display a less blurred image as the tries increase
         } 
         }
       }
@@ -109,6 +114,7 @@ for (var i=0;i<unguessedString.length;i++)
 if (winChecker ==currentString)
 {
   console.log("You Win" + winChecker + currentString);
+  hintPic(6) // this will display clear picture when win
   isWinDisplay(1);
   wins++;
   currentString = "";
@@ -126,8 +132,19 @@ if (tries.length > 5) // check if Player has 5 tries, in which case loses
   setTimeout(createHangmanWord, 3000); // will wait 3 seconds until next word is displayed, also will delete the "isWin" tag                                     // create a new word
   tries = []; //reset Tries
 }
-
 }
+
+
+//====================================================================//
+// This function will show a picture "hint" blurred depending on the "loses" the more loses, the clearer the image shown
+function hintPic(blur)
+{
+
+console.log(Object.values(themes)[1][hint]);
+document.getElementById("displayImg").innerHTML ='<img class="img-fluid mx-auto blur'+blur+ '" src="'+ Object.values(themes)[1][hint] +'" alt="Generic placeholder image">';
+console.log(Object.values(themes)[1][hint]);
+}
+
  
 //====================================================================//
 // this function will create a class to print the unguessed string character by character, it will help scalate design // printing character as buttons
@@ -178,6 +195,7 @@ function isWinDisplay(displayMessage) // this will update isWin tag with the win
   displayMessage = "YOU WIN";
  } else if (displayMessage ==2)
  {
+  wrongGoodMessage("WAS IT DIFFICULT???");
   displayMessage = "YOU LOSE!!! the  word was: " +  currentString.toUpperCase();
  } else
  {
@@ -224,10 +242,13 @@ console.log("User choice: " + choice);
   console.log("Tries : " + tries);
   console.log("Wins : " + wins);
   console.log("Loses : " + loses);
-  document.getElementById("user").innerHTML = "User choice: " + choice;
+  wrongGoodMessage("User choice: " + choice);
+  //document.getElementById("user").innerHTML = "User choice: " + choice;
   // document.getElementById("tries").innerHTML = "Tries : " + tries; // this line was only printing the tries to the button created. might use in the future
   printSingleCharacter("tries", tries);
 	winDisplay();
 
+
+  document.getElementById("hangPic").innerHTML = '<img src="assets/images/'+tries.length+'hangman.png">';
 
 }
